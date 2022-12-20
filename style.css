@@ -1,3 +1,19 @@
 body {
     
 }
+
+.div-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 500px;
+    width: 500px;
+}
+
+.rows {
+    border: 2px solid black;
+}
+
+.test {
+    
+}
