@@ -10,10 +10,50 @@ body {
     width: 500px;
 }
 
-.rows {
+.tiles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
     border: 2px solid black;
 }
 
 .test {
-    
+    display: flex;
+    justify-content: center;
+}
+
+.winning-ann {
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%,0);
+    background-color: gray;
+}
+
+.x-toggle {
+    display: none;
+    text-align: center;
+    width: 400px;
+    height: 40px;
+    font-size: 24px;
+    padding: 10px;
+}
+
+.o-toggle {
+    display: none;
+    text-align: center;
+    width: 400px;
+    height: 40px;
+    font-size: 24px;
+    padding: 10px;
+}
+
+.tie-toggle {
+    display: none;
+    text-align: center;
+    width: 400px;
+    height: 40px;
+    font-size: 24px;
+    padding: 10px;
 }
