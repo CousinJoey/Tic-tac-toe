@@ -51,6 +51,7 @@ function winnerCheck() {
     for (let i = 0; i < gameLogic.winCons.length; i++) {
         if (gameLogic.winCons[i].every(x => gameLogic.xArray.includes(x))) {
             result = true;
+            console.log((gameLogic.winCons[i].every(x => gameLogic.xArray.includes(x))));
             let winningAnnX = document.querySelector(".x-toggle");
             winningAnnX.style.display = "block";
             let playAgainButtonX = document.querySelector(".play-again-x");
@@ -67,14 +68,6 @@ function winnerCheck() {
                 testFunc3();
             })
             break;
-        } else {
-            let tileAnn = document.querySelector(".tie-toggle");
-            tileAnn.style.display = "block";
-            let playAgainTie = document.querySelector(".play-again-tie");
-            playAgainTie.addEventListener("click", (e) => {
-                testFunc3();
-            })
-            break;
         }
     }
 
@@ -82,6 +75,17 @@ function winnerCheck() {
 
 }
 
+function checkForTie() {
+    if (gameLogic.xArray.length === 5 && winnerCheck() === false) {
+        let tileAnn = document.querySelector(".tie-toggle");
+        tileAnn.style.display = "block";
+        let playAgainTie = document.querySelector(".play-again-tie");
+        playAgainTie.addEventListener("click", (e) => {
+            testFunc3();
+        })
+    }
+
+}
     
 
 
@@ -148,8 +152,6 @@ function testFunc(e, index) {
 
 function testFunc2(e, index, currentTurn) {
 
-    console.log(currentTurn);
-
     let placeMarkerX = document.createElement("p");
     placeMarkerX.classList = "marker"
     placeMarkerX.innerText = "X";
@@ -164,12 +166,14 @@ function testFunc2(e, index, currentTurn) {
         (document.getElementById(e.target.id)).appendChild(placeMarkerO);
         gameLogic.oArray.push(index);
         winnerCheck();
+        checkForTie();
     } else {
         gameBoardObject.gameBoard.splice(index, 0, playerOne.marker);
         gameBoardObject.gameBoard.splice((index + 1), 1);
         (document.getElementById(e.target.id)).appendChild(placeMarkerX);
         gameLogic.xArray.push(index);
         winnerCheck();
+        checkForTie();
     }
 
     /*
