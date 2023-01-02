@@ -52,21 +52,11 @@ function winnerCheck() {
         if (gameLogic.winCons[i].every(x => gameLogic.xArray.includes(x))) {
             result = true;
             console.log((gameLogic.winCons[i].every(x => gameLogic.xArray.includes(x))));
-            let winningAnnX = document.querySelector(".x-toggle");
-            winningAnnX.style.display = "block";
-            let playAgainButtonX = document.querySelector(".play-again-x");
-            playAgainButtonX.addEventListener("click", (e) => {
-                testFunc3();
-            })
+            setTimeout(xWinFunc, 200);
             break;
         } else if (gameLogic.winCons[i].every(o => gameLogic.oArray.includes(o))) {
             result = true;
-            let winningAnnO = document.querySelector(".o-toggle");
-            winningAnnO.style.display = "block";
-            let playAgainButtonO = document.querySelector(".play-again-o");
-            playAgainButtonO.addEventListener("click", (e) => {
-                testFunc3();
-            })
+            setTimeout(oWinFunc, 200);
             break;
         }
     }
@@ -132,6 +122,9 @@ function testFunc(e, index) {
 
     let currentTurn = playerTurn
 
+    let introText = document.querySelector(".intro-text");
+    introText.style.display = "none";
+
 
     let placedMarker = document.createElement("p");
     placedMarker.innerText = "X";
@@ -155,10 +148,12 @@ function testFunc2(e, index, currentTurn) {
     let placeMarkerX = document.createElement("p");
     placeMarkerX.classList = "marker"
     placeMarkerX.innerText = "X";
+    placeMarkerX.style.color = "#f4a923";
 
     let placeMarkerO = document.createElement("p");
     placeMarkerO.classList = "marker"
     placeMarkerO.innerText = "O";
+    placeMarkerO.style.color = "#f14b4e";
 
     if (currentTurn % 2 == 0) {
         gameBoardObject.gameBoard.splice(index, 0, playerTwo.marker);
@@ -199,6 +194,9 @@ function testFunc3() {
     gameLogic.xArray = []
     gameLogic.oArray = []
 
+    let introText = document.querySelector(".intro-text");
+    introText.style.display = "block";
+
     let winningAnnX = document.querySelector(".x-toggle");
     winningAnnX.style.display = "none";
 
@@ -211,4 +209,22 @@ function testFunc3() {
     Array.from(document.getElementsByClassName("marker")).forEach(element => {
         element.innerText = "";
     });
+}
+
+function xWinFunc() {
+    let winningAnnX = document.querySelector(".x-toggle");
+            winningAnnX.style.display = "block";
+            let playAgainButtonX = document.querySelector(".play-again-x");
+            playAgainButtonX.addEventListener("click", (e) => {
+                testFunc3();
+            })
+}
+
+function oWinFunc() {
+    let winningAnnO = document.querySelector(".o-toggle");
+            winningAnnO.style.display = "block";
+            let playAgainButtonO = document.querySelector(".play-again-o");
+            playAgainButtonO.addEventListener("click", (e) => {
+                testFunc3();
+            })
 }
