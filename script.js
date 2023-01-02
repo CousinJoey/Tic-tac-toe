@@ -1,4 +1,11 @@
 
+const playerFactory = (player, marker) => {
+    return {player, marker};
+}
+
+const playerOne = playerFactory("player One", "X");
+const playerTwo = playerFactory("player Two", "O");
+
 
 const gameBoardObject = (() => {
     let gameBoard = [
@@ -6,8 +13,6 @@ const gameBoardObject = (() => {
         "", "", "",
         "", "", "",
     ];
-
-
 
    return {
     gameBoard
@@ -33,8 +38,8 @@ const gameLogic = (() => {
 
    ];
 
-   let xArray = []
-   let oArray = []
+   let xArray = [];
+   let oArray = [];
 
    return {
     winCons,
@@ -44,6 +49,34 @@ const gameLogic = (() => {
 
 })();
 
+
+const gameBoardDisplay = (() => {
+
+    const divContainer = document.querySelector(".div-container");
+
+    playerTurn = 0;
+
+    for (let i = 0; i < (gameBoardObject.gameBoard).length; i++) {
+        const tile = document.createElement("div");
+        tile.id = `_${i}`;
+        tile.classList = "tiles";
+        divContainer.appendChild(tile);
+        index = i;
+        tile.addEventListener("click", (e) => {
+            index = i;
+            playerTurn++;
+            checkConditions(e, index);
+
+        });
+    }
+
+    return {
+        playerTurn
+    }
+
+})();
+
+
 function winnerCheck() {
 
     let result = false;
@@ -51,7 +84,6 @@ function winnerCheck() {
     for (let i = 0; i < gameLogic.winCons.length; i++) {
         if (gameLogic.winCons[i].every(x => gameLogic.xArray.includes(x))) {
             result = true;
-            console.log((gameLogic.winCons[i].every(x => gameLogic.xArray.includes(x))));
             setTimeout(xWinFunc, 200);
             break;
         } else if (gameLogic.winCons[i].every(o => gameLogic.oArray.includes(o))) {
@@ -67,91 +99,37 @@ function winnerCheck() {
 
 function checkForTie() {
     if (gameLogic.xArray.length === 5 && winnerCheck() === false) {
-        let tileAnn = document.querySelector(".tie-toggle");
-        tileAnn.style.display = "block";
-        let playAgainTie = document.querySelector(".play-again-tie");
-        playAgainTie.addEventListener("click", (e) => {
-            testFunc3();
-        })
+        tieFunc();
     }
-
-}
-    
-
-
-const displayController = (() => {
-
-
-})();
-
-const gameBoardDisplay = (() => {
-
-    const divContainer = document.querySelector(".div-container")
-
-    playerTurn = 0;
-
-    for (let i = 0; i < (gameBoardObject.gameBoard).length; i++) {
-        const tile = document.createElement("div");
-        tile.id = `_${i}`
-        tile.classList = "tiles"
-        divContainer.appendChild(tile)
-        index = i
-        tile.addEventListener("click", (e) => {
-            index = i
-            playerTurn++;
-            testFunc(e, index)
-
-        })
-    }
-
-    return {
-        playerTurn
-    }
-
-})();
-
-
-const playerFactory = (player, marker) => {
-    return {player, marker};
 }
 
-const playerOne = playerFactory("player One", "X")
-const playerTwo = playerFactory("player Two", "O")
 
-function testFunc(e, index) {
+function checkConditions(e, index) {
 
-    let currentTurn = playerTurn
+    let currentTurn = playerTurn;
 
     let introText = document.querySelector(".intro-text");
     introText.style.display = "none";
 
-
-    let placedMarker = document.createElement("p");
-    placedMarker.innerText = "X";
-
-    let variable = winnerCheck();
-
-    if (gameBoardObject.gameBoard[index] == playerOne.marker || gameBoardObject.gameBoard[index] == playerTwo.marker) {
-        alert("already placed")
+    if (gameBoardObject.gameBoard[index] == playerOne.marker && winnerCheck() === false || gameBoardObject.gameBoard[index] == playerTwo.marker && winnerCheck() === false) {
+        alert("already placed");
         playerTurn = playerTurn - 1;
-    } else if (variable === false) {
-        testFunc2(e, index, currentTurn);
-    } else if (variable === true) {
-        console.log("you've already won, please stop trying to play")
+    } else if (winnerCheck() === false) {
+        playRound(e, index, currentTurn);
+    } else if (winnerCheck() === true) {
+        console.log("you've already won, please stop trying to play");
     }
-
-    
 }
 
-function testFunc2(e, index, currentTurn) {
+function playRound(e, index, currentTurn) {
 
     let placeMarkerX = document.createElement("p");
-    placeMarkerX.classList = "marker"
+    placeMarkerX.classList = "marker";
     placeMarkerX.innerText = "X";
     placeMarkerX.style.color = "#f4a923";
 
     let placeMarkerO = document.createElement("p");
-    placeMarkerO.classList = "marker"
+    placeMarkerO.classList = "marker";
     placeMarkerO.innerText = "O";
     placeMarkerO.style.color = "#f14b4e";
 
@@ -171,17 +149,9 @@ function testFunc2(e, index, currentTurn) {
         checkForTie();
     }
 
-    /*
-    gameBoardObject.gameBoard.splice(index, 0, playerOne.marker);
-    gameBoardObject.gameBoard.splice((index + 1), 1);
-    (document.getElementById(e.target.id)).appendChild(placedMarker);
-    gameLogic.xArray.push(index);
-    winnerCheck();
-    */
-
 }
 
-function testFunc3() {
+function resetGame() {
 
     playerTurn = 0;
 
@@ -191,8 +161,8 @@ function testFunc3() {
         "", "", "",
     ];
 
-    gameLogic.xArray = []
-    gameLogic.oArray = []
+    gameLogic.xArray = [];
+    gameLogic.oArray = [];
 
     let introText = document.querySelector(".intro-text");
     introText.style.display = "block";
@@ -216,8 +186,8 @@ function xWinFunc() {
             winningAnnX.style.display = "block";
             let playAgainButtonX = document.querySelector(".play-again-x");
             playAgainButtonX.addEventListener("click", (e) => {
-                testFunc3();
-            })
+                resetGame();
+            });
 }
 
 function oWinFunc() {
@@ -225,6 +195,16 @@ function oWinFunc() {
             winningAnnO.style.display = "block";
             let playAgainButtonO = document.querySelector(".play-again-o");
             playAgainButtonO.addEventListener("click", (e) => {
-                testFunc3();
-            })
+                resetGame();
+            });
 }
+
+function tieFunc() {
+    let tileAnn = document.querySelector(".tie-toggle");
+        tileAnn.style.display = "block";
+        let playAgainTie = document.querySelector(".play-again-tie");
+        playAgainTie.addEventListener("click", (e) => {
+            resetGame();
+        });
+}
+
